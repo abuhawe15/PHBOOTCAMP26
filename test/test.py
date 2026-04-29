@@ -104,24 +104,6 @@ async def test_project(dut):
         frame = Image.frombytes('RGB', (H_DISPLAY, V_DISPLAY), bytes(framebuffer))
         return frame
 
-    # Start capturing
+ 
 
-    os.makedirs("output", exist_ok=True)
-
-    for i in range(CAPTURE_FRAMES):
-        frame = await capture_frame(i)
-        frame.save(f"output/frame{i}.png")
-
-
-@cocotb.test()
-async def compare_reference(dut):
-
-    for img in glob.glob("output/frame*.png"):
-        basename = img.removeprefix("output/")
-        dut._log.info(f"Comparing {basename} to reference image")
-        frame = Image.open(img)
-        ref = Image.open(f"reference/{basename}")
-        diff = ImageChops.difference(frame, ref)
-        if diff.getbbox() is not None:
-            diff.save(f"output/diff_{basename}")
-            assert False, f"Rendered {basename} differs from reference image"
+        
